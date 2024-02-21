@@ -4,17 +4,8 @@ import { DeleteTwoTone } from "@ant-design/icons";
 import { PersonaServices } from "../../services/PersonaServices"
 
 function Persona() {
+  const [jsondata, setjsondata] = useState([]);
 
-  const listarpersonas = () => {
-    PersonaServices.listarPersonas().then((response) => {
-      console.log("response");
-      console.log(response);
-    })
-  }
-
-  useEffect(() => {
-    listarpersonas();
-  }, [])
   const columns = [
     {
       title: () => { return <span className="text-warning">Nro</span> },
@@ -42,6 +33,30 @@ function Persona() {
     },
   ];
 
+  const listarpersonas = () => {
+    PersonaServices.listarPersonas().then((response) => {
+      setjsondata(response);
+    })
+  }
+  const datatable = jsondata.map((props, key) => {
+    console.log("response");
+    console.log(props);
+    console.log(key);
+    return {
+      key: key,
+      nro: key + 1,
+      nombre: props.nombre,
+      direccion: props.direccion,
+      edad: props.edad,
+    }
+  })
+
+
+  useEffect(() => {
+    listarpersonas();
+  }, [])
+
+
 
   return (
     <>
@@ -58,8 +73,8 @@ function Persona() {
               pageSizeOptions: [50, 100, 200, 300],
             }}
             showSizeChanger={false}
-/*             datPersonaaSource={datatable}
- */          />
+            dataSource={datatable}
+          />
         </Col>
       </Row>
     </>
