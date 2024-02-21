@@ -1,13 +1,13 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { Button, Row, Col, Card, Table, Checkbox, Tooltip } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
-import ModalNuevaTarea from "./componentes/ModalNuevaTarea";
+import ModalNuevaTarea from "../../componentes/ModalNuevaTarea";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoadingCrud, setdataCrud } from '../src/redux/crud/crudDuck';
+import { setLoadingCrud, setdataCrud } from '../../redux/crud/crudDuck';
 
 
 
-import { useDeleteTask, useListarTarea, useUpdateTask } from "../src/services/tareas.services";
+import { useDeleteTask, useListarTarea, useUpdateTask } from "../../services/tareas.services";
 
 const { Meta } = Card; // Agrega esto si necesitas usar Meta de Card
 
