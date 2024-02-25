@@ -12,7 +12,7 @@ import { useDeleteTask, useListarTarea, useUpdateTask } from "../../services/tar
 const { Meta } = Card; // Agrega esto si necesitas usar Meta de Card
 
 function App() {
-  const [titulo, settitulo] = useState("Tarea CRUD");
+  const [titulo, settitulo] = useState("Alumnos");
   const [jsondata, setjsondata] = useState([]);
   const [modalIsOpen, setModal] = useState(false);
   const [obj, setObj] = useState({});
@@ -31,8 +31,8 @@ function App() {
 
 
   useEffect(() => {
-   /*  console.log(loadingtar);
-    console.log(isLoading); */
+    /*  console.log(loadingtar);
+     console.log(isLoading); */
     if (Array.isArray(data) && loadingtar != true) {
       setjsondata(data);
       dispatch(setdataCrud(data))

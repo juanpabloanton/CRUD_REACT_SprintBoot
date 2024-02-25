@@ -1,8 +1,8 @@
 import { BehaviorSubject } from "rxjs";
 import { Url } from './UrlBackServices';
-import { HandleResponse } from "../services/helpers";
+import { HandleResponse } from "./helpers";
 
-export const PersonaServices = {
+export const AlumnoServices = {
     listarPersonas,
     GuardarPersona,
     EliminarPersona,
