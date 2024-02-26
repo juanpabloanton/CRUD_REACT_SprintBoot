@@ -5,7 +5,7 @@ import { AlumnoServices } from "../../services/AlumnoServices";
 import { Utilservice } from "../../services/Utilservices";
 import Spinner from "../../componentes/spinner/Spinner";
 import '../../assets/scss/estilosPersonalizados.css';
-import ModalNuevoEstudiante from "../../componentes/ModalNuevoAlumno";
+import ModalNuevoAlumno from "../../componentes/ModalNuevoAlumno";
 
 function Alumno() {
   const [jsonData, setJsonData] = useState([]);
@@ -28,30 +28,35 @@ function Alumno() {
 
 
   useEffect(() => {
-    listarpersonas();
+    listarAlumno();
   }, []);
 
 
-  const listarpersonas = () => {
+  const listarAlumno = () => {
     //Utilservice.mostrarCargando();
-    AlumnoServices.listarPersonas().then((response) => {
+    AlumnoServices.listarAlumno().then((response) => {
+     // console.log(response);
       setJsonData(response);
     }).finally(() => {
       //Utilservice.ocultarCargando();
     })
   }
+
+
   const datatable = jsonData.map((props, key) => {
 
     return {
       key: key,
       nro: key + 1,
       nombre: props.nombre,
+      matricula: props.matricula,
+      telefono: props.telefono,
       direccion: props.direccion,
       materias_asignadas: props.materiasAsignadas,
       edad: props.edad,
     }
   })
-
+  
 
   const columns = [
     {
@@ -67,9 +72,21 @@ function Alumno() {
       align: "center",
     },
     {
+      title: <span className="text-warning">Telefono</span>,
+      dataIndex: "telefono",
+      key: "telefono",
+      align: "center",
+    },
+    {
       title: <span className="text-warning">Materias</span>,
       dataIndex: "materias_asignadas",
       key: "materias_asignadas",
+      align: "center",
+    },
+    {
+      title: <span className="text-warning">Matricula</span>,
+      dataIndex: "matricula",
+      key: "matricula",
       align: "center",
     },
     {
@@ -85,13 +102,14 @@ function Alumno() {
       align: "center",
     },
   ];
-  
+
   return (
     <div className="container" style={{ margin: "50px" }}>
-      <ModalNuevoEstudiante
+      <ModalNuevoAlumno
         modalIsOpen={modalIsOpen}
         toggle={toggle}
         accion={accion}
+        listarAlumno={listarAlumno}
       />
       <div style={{ textAlign: "center" }}>
         <Row>

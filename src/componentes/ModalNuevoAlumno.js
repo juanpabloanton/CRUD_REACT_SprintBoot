@@ -1,49 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { Button, Input, Checkbox, Modal, Form } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Input, Modal, Form, Select } from "antd";
 import { useCreateTask } from "../services/tareas.services";
-import { useSelector, useDispatch } from "react-redux";
-import { setLoadingCrud, setdataCrud } from '../redux/crud/crudDuck';
+import { useDispatch } from "react-redux";
+import { AlumnoServices } from "../../src/services/AlumnoServices";
 
-
-function ModalNuevoEstudiante(props) {
+function ModalNuevoAlumno(props) {
     const [form] = Form.useForm();
-    const [obj, setobj] = useState({});
-    const createTaskMutation = useCreateTask();
+    const [combomateria, setcombomateria] = useState([]);
     const dispatch = useDispatch();
 
 
+
+ 
+
     const onFinish = async (values) => {
-        try {
-            var obj = {
-                title: values.title,
-                completed: values.completed || false,
-            };
-
-            const { data, error } = await createTaskMutation.mutateAsync(obj);
-
-            if (data) {
-                console.log("Task created successfully:", data);
-                dispatch(setLoadingCrud(true));
-                // Call listar to refresh the data
-            }
-            dispatch(setdataCrud(props.data));
-
-        } catch (error) {
-            console.error("Error creating task:", error.message);
-        } finally {
-            dispatch(setLoadingCrud(false));
+        console.log(values);
+        let obj = {
+            direccion: values.direccion,
+            nombre: values.nombre,
+            matricula: values.matricula,
+            edad: values.edad,
+            telefono: values.telefono,
+            id_materia: values.materias
+        }
+        console.log("objjjjjjjjj");
+        console.log(obj);
+        AlumnoServices.GuardarAlumno(obj).then((response) => {
+            console.log(response);
             reset();
-        };
+            props.listarAlumno();
+        }).finally(() => { 
+
+        });
     };
 
-    // useEffect(() => {
-    //     console.log('obj');
-    //     console.log(obj);
-    // }, [obj]);
 
+
+
+    useEffect(() => {
+        comboMaterias();
+    }, [])
+    const comboMaterias = () => {
+        //Utilservice.mostrarCargando();
+        AlumnoServices.comboMaterias().then((response) => {
+            //console.log(response);
+            setcombomateria(response);
+        }).finally(() => {
+            //Utilservice.ocultarCargando();
+        })
+    }
     const reset = () => {
         form.resetFields();
-        //props.listar();
         props.toggle?.();
     }
 
@@ -51,16 +58,15 @@ function ModalNuevoEstudiante(props) {
         <Modal
             open={props.modalIsOpen}
             onCancel={props.toggle?.bind(null)}
-            title={props.Accion === "Editar" ? "Editar Color" : "Nuevo"}
+            title={props.Accion === "Editar" ? "Editar" : "Nuevo"}
             footer={null}
             destroyOnClose={true}
             width={400}
         >
             <Form onFinish={onFinish} form={form}>
                 <Form.Item
-                    label={<span className="text-primary">title</span>}
-                    showSearch
-                    name="title"
+                    label={<span className="text-primary">Nombre Completo</span>}
+                    name="nombre"
                     rules={[
                         {
                             required: true,
@@ -68,24 +74,58 @@ function ModalNuevoEstudiante(props) {
                         },
                     ]}
                 >
-                    <Input placeholder="Escribe Titulo" />
+                    <Input style={{ width: '100%' }} placeholder="Escribe Nombre" />
                 </Form.Item>
 
                 <Form.Item
-                    label={<span className="text-primary">completed</span>}
-                    showSearch
-                    name="completed"
-                    valuePropName="checked"
+                    label={<span className="text-primary">Dirección</span>}
+                    name="direccion"
                 >
-                    <Checkbox></Checkbox>
+                    <Input style={{ width: '100%' }} placeholder="Escribe Dirección" />
+                </Form.Item>
+
+                <Form.Item
+                    label={<span className="text-primary">Teléfono/Celular</span>}
+                    name="telefono"
+                >
+                    <Input style={{ width: '100%' }} placeholder="Escribe Teléfono" />
+                </Form.Item>
+
+                <Form.Item
+                    label={<span className="text-primary">Matricula</span>}
+                    name="matricula"
+                >
+                    <Input style={{ width: '100%' }} placeholder="Escribe Matricula" />
+                </Form.Item>
+                <Form.Item
+                    label={<span className="text-primary">Edad</span>}
+                    name="edad"
+                >
+                    <Input style={{ width: '100%' }} placeholder="Escribe edad" />
+                </Form.Item>
+
+
+
+
+                <Form.Item
+                    label={<span className="text-primary">Materias</span>}
+                    name="materias"
+                >
+                    <Select
+                        mode="tags"
+                        style={{ width: '100%' }}
+/*                         onChange={handleChange}
+ */                     tokenSeparators={[',']}
+                        options={combomateria}
+                    />
                 </Form.Item>
 
                 <Button htmlType="button" onClick={() => form.submit()} className="primary">
-                    Save
+                    Guardar
                 </Button>
             </Form>
         </Modal>
     );
 }
 
-export default ModalNuevoEstudiante;
+export default ModalNuevoAlumno;
